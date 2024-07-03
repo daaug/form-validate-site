@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { withRouter } from "next/router";
+import styles from "@/styles/User.module.css";
 
 function User(props) {
 
@@ -12,10 +13,17 @@ function User(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main >
+      <main className={styles.container}>
         
-        <p>Email: {props.router.query.email}</p>
-        <p>Password: {props.router.query.password}</p>
+        <div className={styles.groupData}>
+          <p className={styles.userData}>Email: </p>
+          <p className={styles.userData}>{props.router.query.email}</p>
+        </div>
+
+        <div className={styles.groupData}>
+          <p className={styles.userData}>Password: </p>
+          <p className={styles.userData}>{props.router.query.password}</p>
+        </div>
 
       </main>
     </>

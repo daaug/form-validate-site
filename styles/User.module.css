@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+}
+.groupData{
+  display: flex;
+}
+
+@media screen and (min-width: 1025px) {
+  .groupData{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 80%;
+  }
+
+  .userData {
+    font-size: 3rem;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .groupData{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    margin: 1rem 0;
+  }
+
+  .userData {
+    font-size: 3rem;
+  }
+}

@@ -1,6 +1,6 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent, } from "react";
 import { useRouter } from "next/router";
 
 
@@ -19,29 +19,30 @@ export default function Home() {
   // Check if email match the default pattern
   function validateEmail(value: string) : void {
     if(value.search(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g) < 0){
-      setEmailErrorMsg(true)
+      setEmailErrorMsg(true) // Enable email error msg
     } else {
-      setEmailErrorMsg(false)
+      setEmailErrorMsg(false) // Disable email error msg
       setEmail(value)
     }
   }
 
-  // Check if password follows the rule
+  // Check if password follows the size rule
   function validatePassword(value: string) : void {
     if(value.length < 6){
-      setPasswordErrorMsg(true)
+      setPasswordErrorMsg(true) // Enable password error msg
     } else {
-      setPasswordErrorMsg(false)
+      setPasswordErrorMsg(false) // Disable password error msg
       setPassword(value)
     }
   }
-
 
   // Do a POST request and redirects if answer is positive
   async function onSubmit(event: FormEvent<HTMLFormElement>){
     event.preventDefault()
     if(emailErrorMsg == false && passwordErrorMsg == false){
-      setSubmitErrorMsg(false)
+      setSubmitErrorMsg(false) // Hide submit input error msg
+
+      // Send user data to api
       const res = await fetch('/api/submit', {
         method: 'POST',
         body: JSON.stringify({
@@ -49,7 +50,9 @@ export default function Home() {
           password: password
         })
       })
+      // Check api answer
       if(res.ok){
+        // Redirect user and send query data to new page
         router.push({
           pathname: "/user",
           query: {
@@ -59,7 +62,7 @@ export default function Home() {
         })
       }
     } else {
-      setSubmitErrorMsg(true)
+      setSubmitErrorMsg(true) // Show submit input error msg
     }
   }
 
@@ -78,25 +81,29 @@ export default function Home() {
 
         <form className={styles.form} onSubmit={onSubmit} >
 
-          <label className="" >Email</label>
-          <input 
-            onChange={e => validateEmail(e.target.value)}
-            className={styles.input}
-            name="email"
-            type="email" />
+          <div className={styles.fields}>
+            <label className={ styles.label } >Email</label>
+            <input 
+              onChange={e => validateEmail(e.target.value)}
+              className={styles.input}
+              name="email"
+              type="email" />
+          </div>
           {
             emailErrorMsg ?
               <p className={styles.errorMsg} >Email inválido.</p>
               : null
           }
 
-          <label className="" >Senha</label>
-          <input
-            onChange={e => validatePassword(e.target.value)}
-            className={styles.input}
-            name="password"
-            type="password" />
+          <div className={styles.fields}>
+            <label className={ styles.label } >Senha</label>
+            <input
+              onChange={e => validatePassword(e.target.value)}
+              className={styles.input}
+              name="password"
+              type="password" />
 
+          </div>
           {
             passwordErrorMsg ?
               <p className={styles.errorMsg} >Senha deve conter no mínimo 6 caracteres.</p>
