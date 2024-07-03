@@ -1,10 +1,22 @@
 import Head from "next/head";
-import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import { useState } from "react";
 
 export default function Home() {
+
+  const [emailErrorMsg, setEmailErrorMsg] = useState(false);
+  const [passwordErrorMsg, setPasswordErrorMsg] = useState(false);
+
+  function validateEmail(value: string) : void {
+    setEmailErrorMsg(
+      value.search(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g) < 0 ? true : false
+    )
+  }
+
+  function validatePassword(value: string) : void {
+    setPasswordErrorMsg(value.length < 6 ? true : false)
+  }
+
   return (
     <>
       <Head>
@@ -13,17 +25,37 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <main className={styles.container}>
+
         <h2 className={styles.title} >Login</h2>
         <form className={styles.form} >
 
           <label className="" >Email</label>
-          <input className={styles.input} name="email" type="text" />
+          <input 
+            onChange={e => validateEmail(e.target.value)}
+            className={styles.input}
+            name="email"
+            type="text" />
+          {
+            emailErrorMsg ?
+              <p className={styles.errorMsg} >Email inválido.</p>
+              : null
+          }
 
           <label className="" >Senha</label>
-          <input className={styles.input} name="password" type="password" />
+          <input
+            onChange={e => validatePassword(e.target.value)}
+            className={styles.input}
+            name="password"
+            type="password" />
 
-          <button className={styles.submitBtn} type="submit">Enviar</button>
+          {
+            passwordErrorMsg ?
+              <p className={styles.errorMsg} >Senha deve conter no mínimo 6 caracteres.</p>
+              : null
+          }
+
         </form>
 
       </main>

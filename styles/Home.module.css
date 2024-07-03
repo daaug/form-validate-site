@@ -21,6 +21,12 @@
   margin: 0 0 1rem 0;
 }
 
+.errorMsg {
+  font-size: 0.8rem;
+  color: red;
+  margin: 0 0 1rem 0;
+}
+
 .form > .submitBtn {
   width: 7.5rem;
 }
