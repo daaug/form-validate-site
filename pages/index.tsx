@@ -44,7 +44,9 @@ export default function Home() {
 
       // Send user data to api
       const res = await fetch('/api/submit', {
+        mode: "cors",
         method: 'POST',
+        headers: { "Content-type": "application/json" },
         body: JSON.stringify({
           email: email,
           password: password
@@ -52,13 +54,14 @@ export default function Home() {
       })
       // Check api answer
       if(res.ok){
+        const data = await res.json()
         // Redirect user and send query data to new page
         router.push({
           pathname: "/user",
           query: {
-            email: email,
-            password: password
-          }
+            email: data.email,
+            password: data.password,
+          },
         })
       }
     } else {
