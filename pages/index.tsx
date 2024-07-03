@@ -1,20 +1,63 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
-import { useState } from "react";
+import { useState, FormEvent } from "react";
+import { redirect } from 'next/navigation';
+import { useRouter } from "next/router";
 
 export default function Home() {
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const [emailErrorMsg, setEmailErrorMsg] = useState(false);
   const [passwordErrorMsg, setPasswordErrorMsg] = useState(false);
+  const [submitBtnEnabler, setSubmitBtnEnabler] = useState(false);
+
+  const router = useRouter();
 
   function validateEmail(value: string) : void {
-    setEmailErrorMsg(
-      value.search(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g) < 0 ? true : false
-    )
+    if(value.search(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g) < 0){
+      setEmailErrorMsg(true)
+    } else {
+      setEmailErrorMsg(false)
+      setEmail(value)
+    }
   }
 
   function validatePassword(value: string) : void {
-    setPasswordErrorMsg(value.length < 6 ? true : false)
+    if(value.length < 6){
+      setPasswordErrorMsg(true)
+    } else {
+      setPasswordErrorMsg(false)
+      setPassword(value)
+    }
+    validateSubmit()
+  }
+
+  function validateSubmit() : void {
+    setSubmitBtnEnabler(
+      emailErrorMsg == false && passwordErrorMsg == false ? false : true
+    );
+  }
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>){
+    event.preventDefault()
+    const res = await fetch('/api/submit', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    })
+    if(res.ok){
+      router.push({
+        pathname: "/user",
+        query: {
+          email: email,
+          password: password
+        }
+      })
+    }
   }
 
   return (
@@ -29,14 +72,15 @@ export default function Home() {
       <main className={styles.container}>
 
         <h2 className={styles.title} >Login</h2>
-        <form className={styles.form} >
+
+        <form className={styles.form} onSubmit={onSubmit} >
 
           <label className="" >Email</label>
           <input 
             onChange={e => validateEmail(e.target.value)}
             className={styles.input}
             name="email"
-            type="text" />
+            type="email" />
           {
             emailErrorMsg ?
               <p className={styles.errorMsg} >Email inválido.</p>
@@ -56,6 +100,9 @@ export default function Home() {
               : null
           }
 
+          <button 
+            className={styles.submitBtn}
+            type="submit" >Enviar</button>
         </form>
 
       </main>
