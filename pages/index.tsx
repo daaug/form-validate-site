@@ -1,20 +1,22 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
-import { useState, FormEvent } from "react";
-import { redirect } from 'next/navigation';
+import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/router";
+
 
 export default function Home() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [emailErrorMsg, setEmailErrorMsg] = useState(false);
-  const [passwordErrorMsg, setPasswordErrorMsg] = useState(false);
-  const [submitBtnEnabler, setSubmitBtnEnabler] = useState(false);
+  const [emailErrorMsg, setEmailErrorMsg] = useState(true);
+  const [passwordErrorMsg, setPasswordErrorMsg] = useState(true);
+  const [submitErrorMsg, setSubmitErrorMsg] = useState(false);
 
   const router = useRouter();
 
+
+  // Check if email match the default pattern
   function validateEmail(value: string) : void {
     if(value.search(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g) < 0){
       setEmailErrorMsg(true)
@@ -24,6 +26,7 @@ export default function Home() {
     }
   }
 
+  // Check if password follows the rule
   function validatePassword(value: string) : void {
     if(value.length < 6){
       setPasswordErrorMsg(true)
@@ -31,32 +34,32 @@ export default function Home() {
       setPasswordErrorMsg(false)
       setPassword(value)
     }
-    validateSubmit()
   }
 
-  function validateSubmit() : void {
-    setSubmitBtnEnabler(
-      emailErrorMsg == false && passwordErrorMsg == false ? false : true
-    );
-  }
 
+  // Do a POST request and redirects if answer is positive
   async function onSubmit(event: FormEvent<HTMLFormElement>){
     event.preventDefault()
-    const res = await fetch('/api/submit', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: email,
-        password: password
-      })
-    })
-    if(res.ok){
-      router.push({
-        pathname: "/user",
-        query: {
+    if(emailErrorMsg == false && passwordErrorMsg == false){
+      setSubmitErrorMsg(false)
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        body: JSON.stringify({
           email: email,
           password: password
-        }
+        })
       })
+      if(res.ok){
+        router.push({
+          pathname: "/user",
+          query: {
+            email: email,
+            password: password
+          }
+        })
+      }
+    } else {
+      setSubmitErrorMsg(true)
     }
   }
 
@@ -103,6 +106,11 @@ export default function Home() {
           <button 
             className={styles.submitBtn}
             type="submit" >Enviar</button>
+          {
+            submitErrorMsg ?
+              <p className={styles.errorMsg} >Preencha os campos corretamente.</p>
+              : null
+          }
         </form>
 
       </main>
