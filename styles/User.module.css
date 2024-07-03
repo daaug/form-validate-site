@@ -10,6 +10,10 @@
   display: flex;
 }
 
+.dataTitle {
+  color: yellow;
+}
+
 @media screen and (min-width: 1025px) {
   .groupData{
     display: flex;
@@ -18,7 +22,7 @@
     width: 80%;
   }
 
-  .userData {
+  .userData, .dataTitle {
     font-size: 3rem;
   }
 }
@@ -32,7 +36,7 @@
     margin: 1rem 0;
   }
 
-  .userData {
-    font-size: 3rem;
+  .userData, .dataTitle {
+    font-size: 2.7rem;
   }
 }

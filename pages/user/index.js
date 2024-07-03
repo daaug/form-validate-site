@@ -16,12 +16,12 @@ function User(props) {
       <main className={styles.container}>
         
         <div className={styles.groupData}>
-          <p className={styles.userData}>Email: </p>
+          <p className={styles.dataTitle}>Email: </p>
           <p className={styles.userData}>{props.router.query.email}</p>
         </div>
 
         <div className={styles.groupData}>
-          <p className={styles.userData}>Password: </p>
+          <p className={styles.dataTitle}>Password: </p>
           <p className={styles.userData}>{props.router.query.password}</p>
         </div>
 
