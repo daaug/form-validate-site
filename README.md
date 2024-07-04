@@ -17,9 +17,9 @@ bun dev
 ```
 
 ## Project pages and api handler
-Home Page: [http://localhost:3000](http://localhost:3000)
-User Page: [http://localhost:3000/user](http://localhost:3000/user)
-API Endpoint: [http://localhost:3000/api/submit](http://localhost:3000/api/submit)
+- Home Page: [http://localhost:3000](http://localhost:3000)
+- User Page: [http://localhost:3000/user](http://localhost:3000/user)
+- API Endpoint: [http://localhost:3000/api/submit](http://localhost:3000/api/submit)
 
 ## Usage
 Insert your email and password (correctly) and then press Enviar.
